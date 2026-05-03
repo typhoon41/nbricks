@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<Authors>Nikola Dragićević</Authors>
+		<PackageId>GMForce.Bricks</PackageId>
+		<Product>NBricks</Product>
+		<Description>Utilities for .Net based applications.</Description>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<Copyright>Copyright © 2023-, Nikola Dragićević, Belgrade, Serbia</Copyright>
+		<RepositoryUrl>https://github.com/typhoon41/nbricks</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" />
+		<PackageReference Include="FluentValidation.AspNetCore" />
+		<PackageReference Include="GMForce.NDDD" />
+		<PackageReference Include="MicroElements.Swashbuckle.FluentValidation" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" />
+		<PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+		<PackageReference Include="Microsoft.Extensions.ServiceDiscovery" />
+		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
+		<PackageReference Include="Serilog.AspNetCore" />
+		<PackageReference Include="Serilog.Settings.Configuration" />
+		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Serilog.Sinks.OpenTelemetry" />
+		<PackageReference Include="Swashbuckle.AspNetCore" />
+	</ItemGroup>
+</Project>

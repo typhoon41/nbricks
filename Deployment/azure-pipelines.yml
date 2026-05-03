@@ -1,0 +1,78 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  applicationVersion: 0.1.0
+  dotnetVersion: 10.0.x
+
+name: $(applicationVersion).$(Rev:r)
+
+stages:
+- stage: 'Build'
+  displayName: 'Build'
+  jobs:
+  - template: 'Templates/build.yaml'
+    parameters:
+      applicationVersion: $(applicationVersion)
+      dotnetVersion: $(dotnetVersion)
+
+- stage: NugetPublish
+  displayName: Publish package to NuGet
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: WaitForValidation
+    displayName: Wait for approval
+    pool: server
+    timeoutInMinutes: 21600 # job times out in 15 days, can't be a variable
+    steps:
+    - task: ManualValidation@0
+      timeoutInMinutes: 21600 # job times out in 15 days, can't be a variable
+      inputs:
+        notifyUsers: |
+          nizzotyphoon41@hotmail.com
+        instructions: 'Please approve production deploy so it could be executed'
+        onTimeout: reject
+  - deployment: Publish
+    environment: Publish to NuGet
+    variables:
+    - group: Deploy
+    dependsOn: WaitForValidation
+    condition: succeeded('WaitForValidation')
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: none
+          - task: UseDotNet@2
+            displayName: 'Set .Net version'
+            inputs:
+              version: $(dotnetVersion)
+          - task: DownloadBuildArtifacts@1
+            inputs:
+              buildType: 'current'
+              downloadType: 'specific'
+              artifactName: 'NBricks-$(Build.BuildNumber)'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          - task: CmdLine@2
+            displayName: 'Push NuGet Package'
+            inputs:
+              script: 'dotnet nuget push "$(System.ArtifactsDirectory)/NBricks-$(Build.BuildNumber)/*.nupkg" -k $(NugetApiKey) -s "https://api.nuget.org/v3/index.json" --skip-duplicate --no-symbols'
+  
+  - job: git_tag
+    displayName: Create Git tag
+    dependsOn: Publish
+    steps:
+    - checkout: self
+      displayName: 'Checkout current repo'
+      persistCredentials: true
+    - task: Bash@3
+      displayName: Create Git tag
+      inputs:
+        targetType: 'inline'
+        script: |
+          git tag v$(Build.BuildNumber)
+          git push origin v$(Build.BuildNumber)

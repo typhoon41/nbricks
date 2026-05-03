@@ -1,0 +1,58 @@
+parameters:
+- name: applicationVersion
+- name: artifactName
+  default: 'NBricks'
+- name: dotnetVersion
+  default: '10.0.x'
+
+jobs:
+ - job: 'Build'
+   variables:
+      BuildParameters: -p:Version=${{ parameters.applicationVersion }} -p:FileVersion=$(Build.BuildNumber) -p:NBricksRuntime=win-x64 --no-self-contained
+   displayName: 'Build'
+   steps:
+      - task: UseDotNet@2
+        displayName: 'Set .Net version'
+        inputs:
+          version: ${{ parameters.dotnetVersion }}
+
+      - task: NuGetToolInstaller@1
+        displayName: 'Install NuGet Tool'
+
+      - task: DotNetCoreCLI@2
+        displayName: 'Restoring NuGet Packages'
+        inputs:
+          command: 'restore'
+          restoreArguments: '-p:NBricksRuntime=win-x64'
+
+      - task: DotNetCoreCLI@2
+        displayName: '.Net Core Build'
+        inputs:
+          command: 'custom'
+          custom: 'build'
+          arguments: --no-incremental --configuration Release --no-restore $(BuildParameters)
+
+      # - task: CmdLine@2
+      #   displayName: 'Run tests'
+      #   inputs:
+      #     script: 'dotnet test "$(Build.SourcesDirectory)/GMForce.NDDD.Tests/GMForce.NDDD.Tests.csproj" --no-build --no-restore --configuration Release --logger trx --results-directory "$(Agent.TempDirectory)"'
+
+      - task: DotNetCoreCLI@2
+        displayName: Pack the NuGet packages
+        inputs:
+          command: 'pack'
+          packagesToPack: '**/*.csproj'
+          configuration: Release
+          buildProperties: 'Version=${{ parameters.applicationVersion }}'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publishing artifacts'
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: ${{ parameters.artifactName }}-$(Build.BuildNumber)
+          publishLocation: 'Container'
+
+      - task: CmdLine@2
+        displayName: 'Reset local changes'
+        inputs:
+          script: 'git reset --hard'

@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/Deployment/">
+    <File Path="Deployment/azure-pipelines.yml" />
+  </Folder>
+  <Folder Name="/Deployment/Templates/">
+    <File Path="Deployment/Templates/build.yaml" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="GMForce.Bricks/GMForce.Bricks.csproj" />
+</Solution>
