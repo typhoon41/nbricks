@@ -1,5 +1,6 @@
 ﻿using GMForce.NDDD.Contracts;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace GMForce.Bricks.Initialization.Filters;
 
@@ -12,10 +13,9 @@ public class TransactionFilter(Func<IUnitOfWork> unitOfWork) : IAsyncActionFilte
 
         var resultContext = await next();
 
-        var statusCode = context.HttpContext.Response.StatusCode;
-        var okStatusCode = statusCode is >= 200 and < 300;
+        var isFailureResult = resultContext.Result is IStatusCodeActionResult { StatusCode: >= 300 };
 
-        if (resultContext.Exception == null && okStatusCode && context.ModelState.IsValid)
+        if (resultContext.Exception == null && !isFailureResult && context.ModelState.IsValid)
         {
             _ = await unitOfWork().SaveChangesAsync();
         }

@@ -16,5 +16,5 @@ public class InMemoryStorage : IHoldDispatcherStorage
 
     public async Task<IDomainEvent> DequeueAsync() => await _channel.Reader.ReadAsync();
 
-    public IAsyncEnumerable<IDomainEvent> ReadAllAsync() => _channel.Reader.ReadAllAsync();
+    public IAsyncEnumerable<IDomainEvent> ReadAllAsync(CancellationToken cancellationToken = default) => _channel.Reader.ReadAllAsync(cancellationToken);
 }

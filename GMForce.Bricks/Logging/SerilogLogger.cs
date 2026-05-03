@@ -15,8 +15,6 @@ internal class SerilogLogger
     private readonly string _logFilePath;
     private readonly LogEventLevel _defaultLogLevel;
     private readonly bool _isDevelopment;
-    private const string LogExtension = ".log";
-    private const string AuditSuffix = $"audit-{LogExtension}";
 
     internal SerilogLogger(WebApplicationBuilder? builder)
     {
@@ -38,6 +36,11 @@ internal class SerilogLogger
             .MinimumLevel.Override("Microsoft.EntityFrameworkCore", _defaultLogLevel)
             .ReadFrom.Configuration(ConfigurationRetriever.Current);
 
+        if (_isDevelopment)
+        {
+            _ = baseConfig.WriteTo.OpenTelemetry();
+        }
+
         var logger = baseConfig.WriteTo.Logger(lc => DefaultFileConfiguration(lc, false)
                 .Filter.ByExcluding(Matching.FromSource<AuditEventsHandler>()))
             .WriteTo.Logger(lc => DefaultFileConfiguration(lc, true)
@@ -53,8 +56,13 @@ internal class SerilogLogger
             .Enrich.FromLogContext()
             .CreateBootstrapLogger();
 
-    private string FilePath(bool isAudit) => isAudit ?
-        _logFilePath.Replace(LogExtension, AuditSuffix, StringComparison.InvariantCultureIgnoreCase) : _logFilePath;
+    private string FilePath(bool isAudit)
+    {
+        if (!isAudit) return _logFilePath;
+        var dir = Path.GetDirectoryName(_logFilePath) ?? string.Empty;
+        var stem = Path.GetFileNameWithoutExtension(_logFilePath);
+        return Path.Combine(dir, $"{stem}audit-.log");
+    }
 
     private LoggerConfiguration DefaultFileConfiguration(LoggerConfiguration configuration, bool forAudit = false)
     {
@@ -64,11 +72,6 @@ internal class SerilogLogger
                 shared: true,
                 formatProvider: CultureInfo.InvariantCulture,
                 outputTemplate: "[{Timestamp:HH:mm:ss.FFF} {Level}]: {Message:lj}{NewLine}{Exception}");
-
-        if (_isDevelopment)
-        {
-            configuration.WriteTo.OpenTelemetry();
-        }
 
         return configuration;
     }

@@ -44,8 +44,7 @@ public abstract class BaseDbContext : DbContext
             .ToList();
         var domainEvents = entries.SelectMany(x => x.Entity.DomainEvents)
             .ToList();
-        entries.ToList()
-        .ForEach(entry => entry.Entity.ClearDomainEvents());
+        entries.ForEach(entry => entry.Entity.ClearDomainEvents());
 
         return domainEvents;
     }

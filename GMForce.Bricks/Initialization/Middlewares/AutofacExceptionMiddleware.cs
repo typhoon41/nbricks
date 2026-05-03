@@ -17,8 +17,12 @@ internal class AutofacExceptionMiddleware : IResolveMiddleware
         }
         catch (Exception exception)
         {
-            var logger = context.Resolve<ILogger<AutofacExceptionMiddleware>>();
-            logger.LogError(exception, "An error occurred while executing Autofac middleware");
+            try
+            {
+                var logger = context.Resolve<ILogger<AutofacExceptionMiddleware>>();
+                logger.LogError(exception, "An error occurred while executing Autofac middleware");
+            }
+            catch { /* logger unavailable during activation failure */ }
             throw;
         }
     }

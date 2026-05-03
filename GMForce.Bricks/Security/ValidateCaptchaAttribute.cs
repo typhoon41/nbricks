@@ -48,7 +48,7 @@ public sealed class ValidateCaptchaAttribute : ActionFilterAttribute
         }
 
         var url = GetUrlFrom(_settings);
-        _logger.LogDebug("Sending captcha validation to {Url}", url);
+        _logger.LogDebug("Sending captcha validation to {Url}", GetBaseUrlFrom(_settings));
         using var httpClient = _httpClientFactory.CreateClient();
         var input = new Request()
         {
@@ -72,6 +72,9 @@ public sealed class ValidateCaptchaAttribute : ActionFilterAttribute
         _ = await next();
     }
 
+    private static string GetBaseUrlFrom(CaptchaSettings settings) =>
+        $"https://recaptchaenterprise.googleapis.com/v1/projects/{settings.ProjectName}/assessments";
+
     private static string GetUrlFrom(CaptchaSettings settings) =>
-        $"https://recaptchaenterprise.googleapis.com/v1/projects/{settings.ProjectName}/assessments?key={settings.ApiKey}";
+        $"{GetBaseUrlFrom(settings)}?key={settings.ApiKey}";
 }

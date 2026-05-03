@@ -52,7 +52,7 @@ internal static class ContextExtensions
                 messages = Array.Empty<string>();
             }
 
-            messages = messages.Concat(new[] { validationError.ErrorMessage }).ToArray();
+            messages = [.. messages, validationError.ErrorMessage];
             problemDetails.Errors[key] = messages;
         }
     }

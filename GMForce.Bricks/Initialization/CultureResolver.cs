@@ -8,7 +8,8 @@ public class CultureResolver
 
     public CultureResolver(IList<string> supportedLanguages)
     {
-        if (supportedLanguages == null || !supportedLanguages.Any())
+        ArgumentNullException.ThrowIfNull(supportedLanguages);
+        if (!supportedLanguages.Any())
         {
             throw new ArgumentException("There must be at least one supported language!", nameof(supportedLanguages));
         }

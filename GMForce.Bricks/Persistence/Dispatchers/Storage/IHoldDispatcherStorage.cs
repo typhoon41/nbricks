@@ -6,5 +6,5 @@ public interface IHoldDispatcherStorage
 {
     Task EnqueueAsync(IDomainEvent message);
     Task<IDomainEvent> DequeueAsync();
-    IAsyncEnumerable<IDomainEvent> ReadAllAsync();
+    IAsyncEnumerable<IDomainEvent> ReadAllAsync(CancellationToken cancellationToken = default);
 }

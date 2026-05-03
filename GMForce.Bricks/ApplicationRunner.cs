@@ -15,7 +15,7 @@ public abstract class ApplicationRunner()
         {
             Builder = WebApplication.CreateBuilder(options);
             new SerilogLogger(Builder).ConfigureBootstrap();
-            Log.Information($"Starting API host in {Builder.Environment.EnvironmentName} environment.");
+            Log.Information("Starting API host in {Environment} environment.", Builder.Environment.EnvironmentName);
 
             _ = Builder.WebHost.ConfigureKestrel(settings => settings.AddServerHeader = false);
             _ = Builder.Host.UseSerilog(new SerilogLogger(Builder).Configure());

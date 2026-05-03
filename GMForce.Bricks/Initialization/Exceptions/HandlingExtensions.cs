@@ -61,14 +61,14 @@ internal static class HandlingExtensions
             return;
         }
 
-        var problemDetails = GetProblemDetails(context, exception);
+        var environment = context.RequestServices.GetService<IHostEnvironment>();
+        var problemDetails = GetProblemDetails(context, exception, environment);
         var jsonResult = new JsonResult(problemDetails)
         {
             ContentType = "application/problem+json",
             StatusCode = 500
         };
 
-        var environment = context.RequestServices.GetService<IHostEnvironment>();
         if (environment?.IsDevelopment() == false)
         {
             await NotifyDeveloperAbout(context, exception);
@@ -92,16 +92,11 @@ internal static class HandlingExtensions
         await actionResult.ExecuteResultAsync(actionContext);
     }
 
-    private static ProblemDetails GetProblemDetails(HttpContext context, Exception exception)
+    private static ProblemDetails GetProblemDetails(HttpContext context, Exception exception, IHostEnvironment? environment) => new()
     {
-        var problemDetails = new ProblemDetails
-        {
-            Title = "An unexpected error occurred!",
-            Instance = context.Request.Path,
-            Status = StatusCodes.Status500InternalServerError,
-            Detail = string.Empty
-        };
-
-        return problemDetails;
-    }
+        Title = "An unexpected error occurred!",
+        Instance = context.Request.Path,
+        Status = StatusCodes.Status500InternalServerError,
+        Detail = environment?.IsDevelopment() == true ? exception.Message : string.Empty
+    };
 }
