@@ -49,7 +49,7 @@ internal static class ContextExtensions
             var key = validationError.PropertyName;
             if (!problemDetails.Errors.TryGetValue(key, out var messages))
             {
-                messages = Array.Empty<string>();
+                messages = [];
             }
 
             messages = [.. messages, validationError.ErrorMessage];

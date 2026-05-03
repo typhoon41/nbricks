@@ -8,9 +8,15 @@
       "Bash(dotnet restore *)",
       "Bash(dotnet test *)",
       "Bash(gh pr *)",
-      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Nizzo\\\\Desktop\\\\Biblioteke\\\\.NET\\\\Bricks\" -Recurse -File)",
       "Bash(Select-Object -ExpandProperty FullName)",
-      "Bash(Sort-Object)"
+      "Bash(Sort-Object)",
+      "PowerShell(head *)",
+      "PowerShell(tree *)",
+      "WebSearch"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "azure-devops",
+    "Context7"
+  ]
 }

@@ -1,4 +1,4 @@
-﻿using FluentValidation.Internal;
+using FluentValidation.Internal;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -13,7 +13,7 @@ internal static class CamelCaseResolver
 
     private static string DefaultPropertyNameResolver(MemberInfo memberInfo, LambdaExpression expression)
     {
-        if (expression == null)
+        if (expression is null)
         {
             return ResultFrom(memberInfo);
         }
@@ -23,7 +23,7 @@ internal static class CamelCaseResolver
     }
 
     private static string ToCamelCase(string original) =>
-        string.IsNullOrEmpty(original) ? string.Empty : char.ToLowerInvariant(original[0]) + original.Substring(1);
+        string.IsNullOrEmpty(original) ? string.Empty : $"{char.ToLowerInvariant(original[0])}{original[1..]}";
 
-    private static string ResultFrom(MemberInfo memberInfo) => memberInfo != null ? memberInfo.Name : string.Empty;
+    private static string ResultFrom(MemberInfo memberInfo) => memberInfo?.Name ?? string.Empty;
 }

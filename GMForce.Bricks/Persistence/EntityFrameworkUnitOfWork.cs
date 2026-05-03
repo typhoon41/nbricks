@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using GMForce.NDDD.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -6,17 +6,12 @@ using Microsoft.Extensions.Logging;
 namespace GMForce.Bricks.Persistence;
 
 [ExcludeFromCodeCoverage]
-public class EntityFrameworkUnitOfWork<T> : IUnitOfWork where T : DbContext
+public class EntityFrameworkUnitOfWork<T>(T context, ILogger<EntityFrameworkUnitOfWork<T>> logger) : IUnitOfWork
+    where T : DbContext
 {
-    private readonly DbContext _context;
-    private readonly ILogger<EntityFrameworkUnitOfWork<T>> _logger;
+    private readonly DbContext _context = context ?? throw new ArgumentNullException(nameof(context));
+    private readonly ILogger<EntityFrameworkUnitOfWork<T>> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     private bool _cancelSaving;
-
-    public EntityFrameworkUnitOfWork([NotNull] T context, [NotNull] ILogger<EntityFrameworkUnitOfWork<T>> logger)
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

@@ -1,5 +1,5 @@
-﻿namespace GMForce.Bricks.Configuration;
-public class DeveloperContact
+namespace GMForce.Bricks.Configuration;
+public record DeveloperContact
 {
-    public string Email { get; set; } = string.Empty;
+    public required string Email { get; init; }
 }

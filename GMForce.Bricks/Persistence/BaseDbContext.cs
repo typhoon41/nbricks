@@ -1,4 +1,3 @@
-﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using GMForce.NDDD.Contracts;
 using GMForce.NDDD.Persistance;
@@ -6,17 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GMForce.Bricks.Persistence;
 
-public abstract class BaseDbContext : DbContext
+public abstract class BaseDbContext(
+    IDispatchEvents eventsDispatcher,
+    IStoreEvents eventsStore,
+    DbContextOptions options) : DbContext(options)
 {
-    private readonly IDispatchEvents _eventsDispatcher;
-    private readonly IStoreEvents _eventsStore;
-
-    protected BaseDbContext([NotNull] IDispatchEvents eventsDispatcher,
-        [NotNull] IStoreEvents eventsStore, DbContextOptions options) : base(options)
-    {
-        _eventsDispatcher = eventsDispatcher ?? throw new ArgumentNullException(nameof(eventsDispatcher));
-        _eventsStore = eventsStore ?? throw new ArgumentNullException(nameof(eventsStore));
-    }
+    private readonly IDispatchEvents _eventsDispatcher = eventsDispatcher ?? throw new ArgumentNullException(nameof(eventsDispatcher));
+    private readonly IStoreEvents _eventsStore = eventsStore ?? throw new ArgumentNullException(nameof(eventsStore));
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -25,17 +20,13 @@ public abstract class BaseDbContext : DbContext
 
         foreach (var @event in domainEvents)
         {
-            await Dispatch(@event);
+            await _eventsDispatcher.Dispatch(@event);
         }
 
         // Publish integration events that have nothing to do with entity modifications.
-        await Publish();
+        await _eventsStore.Publish();
         return result;
     }
-
-    private async Task Dispatch(IDomainEvent @event) => await _eventsDispatcher.Dispatch(@event);
-
-    private async Task Publish() => await _eventsStore.Publish();
 
     private IEnumerable<IDomainEvent> GatherDomainEvents()
     {

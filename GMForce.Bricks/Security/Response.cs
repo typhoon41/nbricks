@@ -2,8 +2,8 @@
 
 public class Response
 {
-    public ResponseAnalysis RiskAnalysis { get; set; } = new ResponseAnalysis();
-    public ResponseToken TokenProperties { get; set; } = new ResponseToken();
+    public ResponseAnalysis RiskAnalysis { get; set; } = new();
+    public ResponseToken TokenProperties { get; set; } = new();
 
     public bool Invalid(double threshold) => !TokenProperties.Valid && RiskAnalysis.Score < threshold;
 

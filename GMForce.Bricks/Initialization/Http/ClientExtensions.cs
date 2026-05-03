@@ -30,6 +30,6 @@ public static class ClientExtensions
         var content = await result.Content.ReadAsStringAsync();
         var rawResult = JsonSerializer.Deserialize<T>(content, JsonSettings);
 
-        return rawResult != null ? rawResult : throw new InvalidOperationException("Unexpected parsing result!");
+        return rawResult ?? throw new InvalidOperationException("Unexpected parsing result!");
     }
 }

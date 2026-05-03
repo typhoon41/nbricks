@@ -1,4 +1,4 @@
-﻿using GMForce.Bricks.Initialization.Http;
+using GMForce.Bricks.Initialization.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -20,10 +20,14 @@ public sealed class ValidateCaptchaAttribute : ActionFilterAttribute
     public ValidateCaptchaAttribute(IHttpClientFactory httpClientFactory, CaptchaSettings settings, IWebHostEnvironment environment,
         ILogger<ValidateCaptchaAttribute> logger)
     {
-        _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-        _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        ArgumentNullException.ThrowIfNull(httpClientFactory);
+        ArgumentNullException.ThrowIfNull(settings);
+        ArgumentNullException.ThrowIfNull(environment);
+        ArgumentNullException.ThrowIfNull(logger);
+        _httpClientFactory = httpClientFactory;
+        _settings = settings;
+        _environment = environment;
+        _logger = logger;
     }
 
     public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)

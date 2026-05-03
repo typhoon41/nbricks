@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
 using GMForce.NDDD.Contracts;
 
 namespace GMForce.Bricks.Persistence.Dispatchers;
 
-public class EventsStore([NotNull] IDispatchEvents eventsDispatcher) : IStoreEvents
+public class EventsStore(IDispatchEvents eventsDispatcher) : IStoreEvents
 {
     private readonly IDispatchEvents _eventsDispatcher = eventsDispatcher ?? throw new ArgumentNullException(nameof(eventsDispatcher));
     private readonly Queue<IDomainEvent> _events = new();
@@ -12,7 +11,7 @@ public class EventsStore([NotNull] IDispatchEvents eventsDispatcher) : IStoreEve
 
     public async Task Publish()
     {
-        while (_events.Any())
+        while (_events.Count > 0)
         {
             var nextEvent = _events.Dequeue();
             await _eventsDispatcher.Dispatch(nextEvent);

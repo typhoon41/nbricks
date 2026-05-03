@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
 using GMForce.Bricks.Configuration;
 using GMForce.Bricks.Initialization.Http;
@@ -26,16 +26,16 @@ internal static class HandlingExtensions
     {
         var logger = context.Resolve<ILogger<Exception>>();
         var exception = context.Features.Get<IExceptionHandlerPathFeature>()!.Error;
-        switch (exception)
+
+        if (exception is ValidationException validationException)
         {
-            case ValidationException validationException:
-                logger.LogDebug(exception, "Validation exception");
-                await HandleValidationExceptionFrom(context, validationException);
-                return;
-            default:
-                logger.LogError(exception, "Unexpected error");
-                await HandleUnexpectedErrorFrom(context, exception);
-                break;
+            logger.LogDebug(exception, "Validation exception");
+            await HandleValidationExceptionFrom(context, validationException);
+        }
+        else
+        {
+            logger.LogError(exception, "Unexpected error");
+            await HandleUnexpectedErrorFrom(context, exception);
         }
     }
 
