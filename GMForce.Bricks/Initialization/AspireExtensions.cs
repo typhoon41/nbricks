@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -8,6 +9,7 @@ using OpenTelemetry.Trace;
 
 namespace GMForce.Bricks.Initialization;
 
+[ExcludeFromCodeCoverage]
 internal static class AspireExtensions
 {
     private const string HealthEndpointPath = "/health";

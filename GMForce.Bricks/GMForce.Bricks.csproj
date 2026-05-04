@@ -9,7 +9,9 @@
 		<RepositoryUrl>https://github.com/typhoon41/nbricks</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
-
+	<ItemGroup>
+        <InternalsVisibleTo Include="$(AssemblyName).Tests" />
+	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" />
 		<PackageReference Include="FluentValidation.AspNetCore" />

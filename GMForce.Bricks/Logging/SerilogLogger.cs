@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using GMForce.Bricks.Configuration;
 using GMForce.Bricks.Persistence.Handlers;
@@ -10,6 +10,7 @@ using Serilog.Filters;
 
 namespace GMForce.Bricks.Logging;
 
+[ExcludeFromCodeCoverage]
 internal class SerilogLogger
 {
     private readonly string _logFilePath;
@@ -58,7 +59,8 @@ internal class SerilogLogger
 
     private string FilePath(bool isAudit)
     {
-        if (!isAudit) return _logFilePath;
+        if (!isAudit)
+            return _logFilePath;
         var dir = Path.GetDirectoryName(_logFilePath) ?? string.Empty;
         var stem = Path.GetFileNameWithoutExtension(_logFilePath);
         return Path.Combine(dir, $"{stem}audit-.log");

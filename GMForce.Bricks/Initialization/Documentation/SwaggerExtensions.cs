@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.OpenApi;
 
 namespace GMForce.Bricks.Initialization.Documentation;
 
+[ExcludeFromCodeCoverage]
 public static class SwaggerExtensions
 {
     public static void AddSwaggerIn(this IServiceCollection services, IWebHostEnvironment environment, OpenApiSettings settings)

@@ -1,4 +1,8 @@
-﻿namespace GMForce.Bricks.Initialization.Documentation;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace GMForce.Bricks.Initialization.Documentation;
+
+[ExcludeFromCodeCoverage]
 public record ApiDetails
 {
     public string Description { get; set; } = string.Empty;

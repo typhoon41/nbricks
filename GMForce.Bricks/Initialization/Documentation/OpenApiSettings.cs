@@ -1,7 +1,9 @@
-﻿using Swashbuckle.AspNetCore.SwaggerGen;
+﻿using System.Diagnostics.CodeAnalysis;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace GMForce.Bricks.Initialization.Documentation;
 
+[ExcludeFromCodeCoverage]
 public record OpenApiSettings
 {
     public string Email { get; set; } = string.Empty;

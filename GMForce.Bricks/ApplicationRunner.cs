@@ -1,10 +1,12 @@
-﻿using GMForce.Bricks.Logging;
+﻿using System.Diagnostics.CodeAnalysis;
+using GMForce.Bricks.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
 
 namespace GMForce.Bricks;
 
+[ExcludeFromCodeCoverage]
 public abstract class ApplicationRunner()
 {
     protected WebApplicationBuilder? Builder { get; private set; }

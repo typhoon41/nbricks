@@ -1,8 +1,10 @@
-﻿using System.Threading.Channels;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Channels;
 using GMForce.NDDD.Contracts;
 
 namespace GMForce.Bricks.Persistence.Dispatchers.Storage;
 
+[ExcludeFromCodeCoverage]
 public class InMemoryStorage : IHoldDispatcherStorage
 {
     private readonly Channel<IDomainEvent> _channel;

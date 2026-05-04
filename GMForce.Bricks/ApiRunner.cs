@@ -1,3 +1,4 @@
+﻿using System.Diagnostics.CodeAnalysis;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GMForce.Bricks.Initialization;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace GMForce.Bricks;
 
+[ExcludeFromCodeCoverage]
 public class ApiRunner : ApplicationRunner
 {
     private Action<HostBuilderContext, ContainerBuilder> _withGivenConfiguration = (context, builder) => { };

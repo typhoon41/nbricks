@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
 using GMForce.Bricks.Configuration;
 using GMForce.Bricks.Initialization.Http;
@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace GMForce.Bricks.Initialization.Exceptions;
+
 internal static class HandlingExtensions
 {
     internal static void UseExceptionsHandler(this IApplicationBuilder builder) => _ = builder.UseExceptionHandler(new ExceptionHandlerOptions

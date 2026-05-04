@@ -32,10 +32,13 @@ jobs:
           custom: 'build'
           arguments: --no-incremental --configuration Release --no-restore $(BuildParameters)
 
-      # - task: CmdLine@2
-      #   displayName: 'Run tests'
-      #   inputs:
-      #     script: 'dotnet test "$(Build.SourcesDirectory)/GMForce.NDDD.Tests/GMForce.NDDD.Tests.csproj" --no-build --no-restore --configuration Release --logger trx --results-directory "$(Agent.TempDirectory)"'
+      - task: CmdLine@2
+        displayName: 'Run tests'
+        inputs:
+          script: |
+            for project in $(find "$(Build.SourcesDirectory)" -name "*.Tests.csproj"); do
+              dotnet test "$project" --no-build --no-restore --configuration Release --logger trx --results-directory "$(Agent.TempDirectory)"
+            done
 
       - task: DotNetCoreCLI@2
         displayName: Pack the NuGet packages

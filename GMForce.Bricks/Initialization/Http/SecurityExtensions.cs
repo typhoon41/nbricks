@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GMForce.Bricks.Initialization.Http;
+
+[ExcludeFromCodeCoverage]
 internal static class SecurityExtensions
 {
     internal static void AddHttpsSecurity(this IServiceCollection services)
