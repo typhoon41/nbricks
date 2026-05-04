@@ -12,7 +12,8 @@
       "Bash(Sort-Object)",
       "PowerShell(head *)",
       "PowerShell(tree *)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(del *)"
     ]
   },
   "enabledMcpjsonServers": [

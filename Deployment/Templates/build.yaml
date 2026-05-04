@@ -23,7 +23,7 @@ jobs:
         displayName: 'Restoring NuGet Packages'
         inputs:
           command: 'restore'
-          restoreArguments: '-p:NBricksRuntime=win-x64'
+          restoreArguments: '-p:NBricksRuntime=win-x64 --locked'
 
       - task: DotNetCoreCLI@2
         displayName: '.Net Core Build'
@@ -45,12 +45,12 @@ jobs:
           configuration: Release
           buildProperties: 'Version=${{ parameters.applicationVersion }}'
 
-      - task: PublishBuildArtifacts@1
+      - task: PublishPipelineArtifact@1
         displayName: 'Publishing artifacts'
         inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          ArtifactName: ${{ parameters.artifactName }}-$(Build.BuildNumber)
-          publishLocation: 'Container'
+          targetPath: '$(Build.ArtifactStagingDirectory)'
+          artifactName: ${{ parameters.artifactName }}-$(Build.BuildNumber)
+          publishLocation: 'pipeline'
 
       - task: CmdLine@2
         displayName: 'Reset local changes'

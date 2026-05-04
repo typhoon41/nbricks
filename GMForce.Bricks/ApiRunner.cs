@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GMForce.Bricks.Initialization;
 using GMForce.Bricks.Initialization.Exceptions;
@@ -17,19 +17,18 @@ public class ApiRunner : ApplicationRunner
     private Action _configureServices = () => { };
     private Action<WebApplication> _configure = (application) => { };
 
+    private WebApplicationBuilder RequiredBuilder =>
+        Builder ?? throw new InvalidOperationException("The WebApplicationBuilder is not initialized.");
+
     protected override void OnApplicationRun()
     {
-        if (Builder is null)
-        {
-            throw new InvalidOperationException("The WebApplicationBuilder is not initialized.");
-        }
-
-        _ = Builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-        _ = Builder.Host.ConfigureContainer(_withGivenConfiguration);
+        var builder = RequiredBuilder;
+        _ = builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+        _ = builder.Host.ConfigureContainer(_withGivenConfiguration);
         _configureServices();
-        Builder.UseAspireServiceDiscovery();
+        builder.UseAspireServiceDiscovery();
 
-        var application = Builder.Build();
+        var application = builder.Build();
         _ = application.MapDefaultEndpoints();
 
         _configure(application);
@@ -44,7 +43,7 @@ public class ApiRunner : ApplicationRunner
             containerBuilder.ComponentRegistryBuilder.Registered += (sender, args) =>
                 args.ComponentRegistration.PipelineBuilding += (pipelineSender, pipelineArgs) =>
                     pipelineArgs.Use(new AutofacExceptionMiddleware());
-            configureContainer(Builder ?? throw new InvalidOperationException("The WebApplicationBuilder is not initialized."), containerBuilder);
+            configureContainer(RequiredBuilder, containerBuilder);
         };
         return this;
     }
@@ -53,17 +52,13 @@ public class ApiRunner : ApplicationRunner
     {
         _configureServices = () =>
         {
-            if (Builder is null)
-            {
-                throw new InvalidOperationException("The WebApplicationBuilder is not initialized.");
-            }
-
-            configureServices(Builder);
-            Builder.Services.AddHttpsSecurity();
-            _ = Builder.Services.AddHttpContextAccessor();
-            _ = Builder.Services.AddRouting(options => options.LowercaseUrls = true);
+            var builder = RequiredBuilder;
+            configureServices(builder);
+            builder.Services.AddHttpsSecurity();
+            _ = builder.Services.AddHttpContextAccessor();
+            _ = builder.Services.AddRouting(options => options.LowercaseUrls = true);
             // Must be PostConfigure due to: https://github.com/aspnet/Mvc/issues/7858
-            _ = Builder.Services.PostConfigure<ApiBehaviorOptions>(options => options.FluentValidationBehavior());
+            _ = builder.Services.PostConfigure<ApiBehaviorOptions>(options => options.FluentValidationBehavior());
         };
         return this;
     }
@@ -73,17 +68,13 @@ public class ApiRunner : ApplicationRunner
     {
         _configure = (application) =>
         {
-            if (Builder is null)
-            {
-                throw new InvalidOperationException("The WebApplicationBuilder is not initialized.");
-            }
-
-            preconfigureApplication?.Invoke(Builder, application);
+            var builder = RequiredBuilder;
+            preconfigureApplication?.Invoke(builder, application);
             _ = application.UseHttpsRedirection();
             application.UseExceptionsHandler();
             _ = application.UseRouting();
             _ = application.MapControllers();
-            configureApplication(Builder, application);
+            configureApplication(builder, application);
             application.ConfigureFluentValidation();
         };
 

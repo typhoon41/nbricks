@@ -29,7 +29,7 @@ stages:
     pool: server
     timeoutInMinutes: 21600 # job times out in 15 days, can't be a variable
     steps:
-    - task: ManualValidation@0
+    - task: ManualValidation@1
       timeoutInMinutes: 21600 # job times out in 15 days, can't be a variable
       inputs:
         notifyUsers: |
@@ -51,17 +51,16 @@ stages:
             displayName: 'Set .Net version'
             inputs:
               version: $(dotnetVersion)
-          - task: DownloadBuildArtifacts@1
+          - task: DownloadPipelineArtifact@2
             inputs:
               buildType: 'current'
-              downloadType: 'specific'
               artifactName: 'NBricks-$(Build.BuildNumber)'
-              downloadPath: '$(System.ArtifactsDirectory)'
+              targetPath: '$(System.ArtifactsDirectory)/NBricks-$(Build.BuildNumber)'
           - task: CmdLine@2
             displayName: 'Push NuGet Package'
             inputs:
               script: 'dotnet nuget push "$(System.ArtifactsDirectory)/NBricks-$(Build.BuildNumber)/*.nupkg" -k $(NugetApiKey) -s "https://api.nuget.org/v3/index.json" --skip-duplicate --no-symbols'
-  
+
   - job: git_tag
     displayName: Create Git tag
     dependsOn: Publish

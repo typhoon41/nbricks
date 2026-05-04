@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using GMForce.Bricks.Configuration;
 using GMForce.Bricks.Persistence.Handlers;
