@@ -15,7 +15,9 @@
       "WebSearch",
       "Bash(del *)",
       "Bash(Select-Object FullName)",
-      "Bash(ConvertTo-Json)"
+      "Bash(ConvertTo-Json)",
+      "Bash(Remove-Item *)",
+      "Bash(Select-String -Pattern \"error|warning|succeeded|failed\")"
     ]
   },
   "enabledMcpjsonServers": [

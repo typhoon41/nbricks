@@ -9,7 +9,6 @@
 		<AnalysisLevel>latest</AnalysisLevel>
 		<TargetFramework>net10.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
-		<RuntimeIdentifier Condition="'$(NBricksRuntime)' != '' AND '$(IsTestProject)' != 'true'">$(NBricksRuntime)</RuntimeIdentifier>
 		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 	</PropertyGroup>
 </Project>

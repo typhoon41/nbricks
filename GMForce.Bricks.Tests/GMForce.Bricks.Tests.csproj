@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<IsTestProject>true</IsTestProject>
-		<NoWarn>$(NoWarn);CA1812;CA1001;CA2213;CA1806;CA2000</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -21,5 +20,10 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+	  <EditorConfigFiles Update="C:\Users\Nizzo\Desktop\Biblioteke\.NET\Bricks\GMForce.Bricks.Tests\.editorconfig">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </EditorConfigFiles>
 	</ItemGroup>
 </Project>

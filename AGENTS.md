@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 # Restore (lock file enforced)
-dotnet restore -p:NBricksRuntime=win-x64
+dotnet restore
 
 # Build
 dotnet build --configuration Release --no-incremental
@@ -98,4 +98,4 @@ The log file path must be provided in `appsettings.json` under the key `LogPath`
 
 ## Deployment
 
-CI/CD is Azure Pipelines (`Deployment/azure-pipelines.yml`). Merges to `main` trigger a build; NuGet publish requires manual approval. Version is set in the pipeline variable `applicationVersion`. The runtime target is `win-x64` (passed as `-p:NBricksRuntime=win-x64`).
+CI/CD is Azure Pipelines (`Deployment/azure-pipelines.yml`). Merges to `main` trigger a build; NuGet publish requires manual approval. Version is set in the pipeline variable `applicationVersion`. The library is built as a portable `net10.0` package — no runtime identifier is set.

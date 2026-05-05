@@ -8,7 +8,7 @@ parameters:
 jobs:
  - job: 'Build'
    variables:
-      BuildParameters: -p:Version=${{ parameters.applicationVersion }} -p:FileVersion=$(Build.BuildNumber) -p:NBricksRuntime=win-x64 --no-self-contained
+      BuildParameters: -p:Version=${{ parameters.applicationVersion }} -p:FileVersion=$(Build.BuildNumber)
    displayName: 'Build'
    steps:
       - task: UseDotNet@2
@@ -23,7 +23,7 @@ jobs:
         displayName: 'Restoring NuGet Packages'
         inputs:
           command: 'restore'
-          restoreArguments: '-p:NBricksRuntime=win-x64 -p:RestoreLockedMode=true'
+          restoreArguments: '-p:RestoreLockedMode=true'
 
       - task: DotNetCoreCLI@2
         displayName: '.Net Core Build'

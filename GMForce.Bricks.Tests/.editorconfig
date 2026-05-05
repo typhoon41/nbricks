@@ -1,0 +1,10 @@
+# To learn more about .editorconfig see https://aka.ms/editorconfigdocs
+############################### 
+# Core EditorConfig Options   # 
+############################### 
+# All files 
+root = false
+
+[*.cs]
+dotnet_diagnostic.CA1806.severity = none # CA1806: Do not ignore method results
+dotnet_diagnostic.CA1812.severity = none # CA1812: Avoid uninstantiated internal classes

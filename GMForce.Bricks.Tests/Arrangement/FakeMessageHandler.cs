@@ -1,10 +1,13 @@
-﻿using System.Net;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Text;
 
 namespace GMForce.Bricks.Tests.Arrangement;
 
 internal sealed class FakeMessageHandler(HttpResponseMessage response) : HttpMessageHandler
 {
+    [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope",
+        Justification = "Disposal is handled by HttpClient")]
     internal static HttpClient ClientWith(string json, HttpStatusCode status = HttpStatusCode.OK)
     {
         var message = new HttpResponseMessage(status)
