@@ -23,7 +23,7 @@ jobs:
         displayName: 'Restoring NuGet Packages'
         inputs:
           command: 'restore'
-          restoreArguments: '-p:NBricksRuntime=win-x64 --locked'
+          restoreArguments: '-p:NBricksRuntime=win-x64 -p:RestoreLockedMode=true'
 
       - task: DotNetCoreCLI@2
         displayName: '.Net Core Build'

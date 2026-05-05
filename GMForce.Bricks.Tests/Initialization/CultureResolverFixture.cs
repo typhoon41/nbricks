@@ -27,9 +27,9 @@ internal sealed class CultureResolverFixture
     [Test]
     public void SetCultureKnownCultureSetsCurrentCulture()
     {
-        var sut = new CultureResolver([Cultures.Default, Cultures.Secondary]);
+        var resolver = new CultureResolver([Cultures.Default, Cultures.Secondary]);
 
-        sut.SetCulture(Cultures.Secondary);
+        resolver.SetCulture(Cultures.Secondary);
 
         CultureInfo.CurrentCulture.Name.ShouldBe(Cultures.Secondary);
     }
@@ -37,9 +37,9 @@ internal sealed class CultureResolverFixture
     [Test]
     public void SetCultureUnknownCultureFallsBackToDefault()
     {
-        var sut = new CultureResolver([Cultures.Default, Cultures.Secondary]);
+        var resolver = new CultureResolver([Cultures.Default, Cultures.Secondary]);
 
-        sut.SetCulture(Cultures.Unknown);
+        resolver.SetCulture(Cultures.Unknown);
 
         CultureInfo.CurrentCulture.Name.ShouldBe(Cultures.Default);
     }

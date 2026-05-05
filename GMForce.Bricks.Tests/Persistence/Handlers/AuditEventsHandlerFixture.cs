@@ -10,13 +10,13 @@ namespace GMForce.Bricks.Tests.Persistence.Handlers;
 internal sealed class AuditEventsHandlerFixture
 {
     private ILogger<AuditEventsHandler> _logger = null!;
-    private AuditEventsHandler _sut = null!;
+    private AuditEventsHandler _handler = null!;
 
     [SetUp]
     public void SetUp()
     {
         _logger = A.Fake<ILogger<AuditEventsHandler>>();
-        _sut = new AuditEventsHandler(_logger);
+        _handler = new AuditEventsHandler(_logger);
     }
 
     [Test]
@@ -26,7 +26,7 @@ internal sealed class AuditEventsHandlerFixture
         A.CallTo(() => ((IAuditUser)auditEvent).Report()).Returns("audit log");
         A.CallTo(() => ((IAuditUser)auditEvent).Details()).Returns(["detail1"]);
 
-        await _sut.Handle(auditEvent, CancellationToken.None);
+        await _handler.Handle(auditEvent, CancellationToken.None);
 
         A.CallTo(_logger).MustHaveHappened();
     }
@@ -36,7 +36,7 @@ internal sealed class AuditEventsHandlerFixture
     {
         var domainEvent = A.Fake<IDomainEvent>();
 
-        await _sut.Handle(domainEvent, CancellationToken.None);
+        await _handler.Handle(domainEvent, CancellationToken.None);
 
         A.CallTo(_logger).MustNotHaveHappened();
     }
@@ -46,7 +46,7 @@ internal sealed class AuditEventsHandlerFixture
     {
         var domainEvent = A.Fake<IDomainEvent>();
 
-        var result = _sut.Handle(domainEvent, CancellationToken.None);
+        var result = _handler.Handle(domainEvent, CancellationToken.None);
 
         await result;
         result.IsCompletedSuccessfully.ShouldBeTrue();

@@ -42,11 +42,11 @@ internal sealed class LocalizationMiddlewareFixture
             capturedCulture = CultureInfo.CurrentCulture.Name;
             return Task.CompletedTask;
         }
-        var sut = new LocalizationMiddleware(next, resolver);
+        var middleware = new LocalizationMiddleware(next, resolver);
         var context = new DefaultHttpContext();
         context.Request.Headers.AcceptLanguage = Cultures.Secondary;
 
-        await sut.InvokeAsync(context);
+        await middleware.InvokeAsync(context);
 
         capturedCulture.ShouldBe(Cultures.Secondary);
     }
@@ -61,10 +61,10 @@ internal sealed class LocalizationMiddlewareFixture
             capturedCulture = CultureInfo.CurrentCulture.Name;
             return Task.CompletedTask;
         }
-        var sut = new LocalizationMiddleware(next, resolver);
+        var middleware = new LocalizationMiddleware(next, resolver);
         var context = new DefaultHttpContext();
 
-        await sut.InvokeAsync(context);
+        await middleware.InvokeAsync(context);
 
         capturedCulture.ShouldBe(Cultures.Default);
     }

@@ -15,9 +15,9 @@ internal sealed class DateOnlyJsonConverterFixture
     [TestCase(typeof(DateTime), false)]
     public void CanConvert(Type type, bool expected)
     {
-        var sut = new DateOnlyJsonConverter();
+        var converter = new DateOnlyJsonConverter();
 
-        var result = sut.CanConvert(type);
+        var result = converter.CanConvert(type);
 
         result.ShouldBe(expected);
     }

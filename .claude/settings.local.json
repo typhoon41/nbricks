@@ -13,7 +13,9 @@
       "PowerShell(head *)",
       "PowerShell(tree *)",
       "WebSearch",
-      "Bash(del *)"
+      "Bash(del *)",
+      "Bash(Select-Object FullName)",
+      "Bash(ConvertTo-Json)"
     ]
   },
   "enabledMcpjsonServers": [
